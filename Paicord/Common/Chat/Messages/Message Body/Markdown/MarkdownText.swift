@@ -24,7 +24,6 @@ struct MarkdownText: View {
   @State private var emojiPopover: DiscordModels.Emoji?
   @State private var unicodeEmojiPopover: String?
 
-  @ViewStorage private var documentFrame: CGRect = .zero
   @State private var tapLocalPoint: (point: CGPoint, size: CGSize) = (.zero, .zero)
 
   init(
@@ -37,7 +36,6 @@ struct MarkdownText: View {
     self.allowsJumboEmoji = allowsJumboEmoji
   }
 
-  /// Overrides the text color, e.g. to indicate a failed-to-send message.
   func errorColor(_ color: Color?) -> MarkdownText {
     var copy = self
     copy.foregroundColorOverride = color
@@ -73,12 +71,6 @@ struct MarkdownText: View {
     .textual.textSelection(.enabled)
     .textual.overflowMode(.wrap)
     .foregroundStyle(foregroundColorOverride ?? theme.markdown.text)
-    .background(
-      GeometryReader { geometry in
-        documentFrame = geometry.frame(in: .global)
-        return Color.clear
-      }
-    )
     .popover(
       isPresented: isPopoverPresented,
       attachmentAnchor: .rect(.rect(CGRect(origin: tapLocalPoint.point, size: tapLocalPoint.size))),
@@ -405,24 +397,13 @@ struct MarkdownText: View {
 
   // MARK: - Re-parsing
 
-  /// Custom syntax extensions bake resolved names/colors into the parsed `AttributedString`, so
-  /// changing data they depend on (a nickname, a role's color, the theme, revealed spoilers)
-  /// needs a re-parse, which `revision` triggers without resetting the view's identity.
   private struct RevisionSignature: Hashable {
-    let userCount: Int
-    let memberCount: Int?
-    let roleCount: Int?
-    let channelCount: Int?
     let themeID: String
     let revealedSpoilers: Set<String>
   }
 
   private var revision: RevisionSignature {
     RevisionSignature(
-      userCount: GatewayStore.shared.user.users.count,
-      memberCount: guildStore?.memberCount,
-      roleCount: guildStore?.roleCount,
-      channelCount: guildStore?.channels.count,
       themeID: theme.id,
       revealedSpoilers: revealedSpoilers
     )
@@ -450,8 +431,6 @@ struct MarkdownText: View {
     return extensions
   }
 
-  // MARK: - Link handling
-
   private func handleTap(url: URL, bounds: CGRect) {
     if url.scheme == "textual-discord" {
       if url.host == "spoiler",
@@ -472,14 +451,8 @@ struct MarkdownText: View {
         ImpactGenerator.impact(style: .light)
         unicodeEmojiPopover = character
         tapLocalPoint = (
-          CGPoint(
-            x: bounds.minX - documentFrame.minX,
-            y: bounds.minY - documentFrame.minY
-          ),
-          CGSize(
-            width: bounds.width,
-            height: bounds.height
-          )
+          CGPoint(x: bounds.minX, y: bounds.minY),
+          CGSize(width: bounds.width, height: bounds.height)
         )
       } else if url.host == "emoji",
         let encoded = url.pathComponents.last,
@@ -493,14 +466,8 @@ struct MarkdownText: View {
         ImpactGenerator.impact(style: .light)
         emojiPopover = emoji
         tapLocalPoint = (
-          CGPoint(
-            x: bounds.minX - documentFrame.minX,
-            y: bounds.minY - documentFrame.minY
-          ),
-          CGSize(
-            width: bounds.width,
-            height: bounds.height
-          )
+          CGPoint(x: bounds.minX, y: bounds.minY),
+          CGSize(width: bounds.width, height: bounds.height)
         )
       }
     }
@@ -516,14 +483,8 @@ struct MarkdownText: View {
         ImpactGenerator.impact(style: .light)
         userPopover = user
         tapLocalPoint = (
-          CGPoint(
-            x: bounds.minX - documentFrame.minX,
-            y: bounds.minY - documentFrame.minY
-          ),
-          CGSize(
-            width: bounds.width,
-            height: bounds.height
-          )
+          CGPoint(x: bounds.minX, y: bounds.minY),
+          CGSize(width: bounds.width, height: bounds.height)
         )
       }
     default:
