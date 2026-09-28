@@ -33,8 +33,10 @@ extension StructuredText {
         indentationLevel: indentationLevel
       )
       let resolvedStyle = tableStyle.resolve(configuration: configuration)
-        .onPreferenceChange(TableCell.SpacingKey.self) { @MainActor in
-          spacing = $0
+        .onPreferenceChange(TableCell.SpacingKey.self) { value in
+          MainActor.assumeIsolated {
+            spacing = value
+          }
         }
 
       AnyView(resolvedStyle)

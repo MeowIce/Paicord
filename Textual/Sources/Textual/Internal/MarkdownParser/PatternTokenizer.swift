@@ -74,24 +74,19 @@ struct PatternTokenizer {
 }
 
 extension PatternTokenizer {
-  struct Pattern {
+  struct Pattern: @unchecked Sendable {
     let regex: Regex<(Substring, Substring)>
     let tokenType: TokenType
   }
 }
 
 extension PatternTokenizer.Pattern {
-  static var emoji: Self {
-    .init(regex: /:([a-zA-Z0-9_+-]+):/, tokenType: .emoji)
-  }
+  static let emoji: Self = .init(regex: /:([a-zA-Z0-9_+-]+):/, tokenType: .emoji)
 
-  static var mathBlock: Self {
-    .init(regex: /(?s)\$\$(.+?)\$\$/, tokenType: .mathBlock)
-  }
+  static let mathBlock: Self = .init(regex: /(?s)\$\$(.+?)\$\$/, tokenType: .mathBlock)
 
-  static var mathInline: Self {
-    .init(regex: /\$(?!\$)((?:\\\$|[^$\n])+)\$/, tokenType: .mathInline)
-  }
+  static let mathInline: Self = .init(
+    regex: /\$(?!\$)((?:\\\$|[^$\n])+)\$/, tokenType: .mathInline)
 }
 
 extension PatternTokenizer {

@@ -23,7 +23,11 @@ public struct AttributedStringMarkdownParser: MarkupParser {
   }
 
   public func attributedString(for input: String) throws -> AttributedString {
-    try processor.expand(
+    let cacheKey = "\(input.hashValue)"
+    if let cached = MarkdownParserCache.shared.get(key: cacheKey) {
+      return cached
+    }
+    let parsed = try processor.expand(
       AttributedString(
         markdown: input,
         including: \.textual,
@@ -31,6 +35,8 @@ public struct AttributedStringMarkdownParser: MarkupParser {
         baseURL: baseURL
       )
     )
+    MarkdownParserCache.shared.set(parsed, for: cacheKey)
+    return parsed
   }
 }
 

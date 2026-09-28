@@ -35,8 +35,10 @@ extension StructuredText {
           )
         }
       }
-      .onPreferenceChange(MarkerWidthKey.self) { @MainActor in
-        markerWidth = $0
+      .onPreferenceChange(MarkerWidthKey.self) { value in
+        MainActor.assumeIsolated {
+          markerWidth = value
+        }
       }
       .environment(\.resolvedListItemSpacing, listItemSpacing.resolve(in: textEnvironment))
       .environment(\.listItemSpacingEnabled, true)

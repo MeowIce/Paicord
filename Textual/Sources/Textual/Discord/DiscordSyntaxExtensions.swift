@@ -217,58 +217,37 @@ extension AttributedStringMarkdownParser.SyntaxExtension {
 }
 
 extension PatternTokenizer.Pattern {
-  fileprivate static var discordUserMention: Self {
-    .init(regex: /<@!?(\d+)>/, tokenType: .discordUserMention)
-  }
+  fileprivate static let discordUserMention: Self = .init(
+    regex: /<@!?(\d+)>/, tokenType: .discordUserMention)
 
-  fileprivate static var discordChannelMention: Self {
-    .init(regex: /<#(\d+)>/, tokenType: .discordChannelMention)
-  }
+  fileprivate static let discordChannelMention: Self = .init(
+    regex: /<#(\d+)>/, tokenType: .discordChannelMention)
 
-  fileprivate static var discordRoleMention: Self {
-    .init(regex: /<@&(\d+)>/, tokenType: .discordRoleMention)
-  }
+  fileprivate static let discordRoleMention: Self = .init(
+    regex: /<@&(\d+)>/, tokenType: .discordRoleMention)
 
-  // Emoji, timestamps, and no-embed links match a `<scheme:rest>` shape that Foundation's own
-  // CommonMark parser already recognizes as an autolink, consuming it before any SyntaxExtension
-  // gets a chance to run. `DiscordMarkdown.preprocess(_:)` rewrites their `<...>` delimiters into
-  // these private-use sentinels beforehand, so these patterns match the sentinel form, not the
-  // original angle brackets.
+  fileprivate static let discordEmoji: Self = .init(
+    regex: /\u{E002}:?((?:a:)?[A-Za-z0-9_]{2,32}:\d+)\u{E003}/,
+    tokenType: .discordEmoji
+  )
 
-  fileprivate static var discordEmoji: Self {
-    .init(
-      // The static case's mandatory colon (`<:name:id>`) is consumed by the leading `:?` and
-      // isn't part of the capture — matches `DiscordMarkdownPreprocessor`'s `emojiPattern`, which
-      // wraps `<:name:id>`/`<a:name:id>` into this sentinel form before this ever runs.
-      regex: /\u{E002}:?((?:a:)?[A-Za-z0-9_]{2,32}:\d+)\u{E003}/,
-      tokenType: .discordEmoji
-    )
-  }
+  fileprivate static let discordTimestamp: Self = .init(
+    regex: /\u{E002}t:(-?\d+(?::[tTdDfFR])?)\u{E003}/,
+    tokenType: .discordTimestamp
+  )
 
-  fileprivate static var discordTimestamp: Self {
-    .init(
-      regex: /\u{E002}t:(-?\d+(?::[tTdDfFR])?)\u{E003}/,
-      tokenType: .discordTimestamp
-    )
-  }
+  fileprivate static let discordNoEmbedLink: Self = .init(
+    regex: /\u{E002}(https?:\/\/[^\s<>]+)\u{E003}/,
+    tokenType: .discordNoEmbedLink
+  )
 
-  fileprivate static var discordNoEmbedLink: Self {
-    .init(
-      regex: /\u{E002}(https?:\/\/[^\s<>]+)\u{E003}/,
-      tokenType: .discordNoEmbedLink
-    )
-  }
+  fileprivate static let discordSpoiler: Self = .init(
+    regex: /\|\|(.+?)\|\|/, tokenType: .discordSpoiler)
 
-  fileprivate static var discordSpoiler: Self {
-    .init(regex: /\|\|(.+?)\|\|/, tokenType: .discordSpoiler)
-  }
-
-  fileprivate static var discordSubtext: Self {
-    .init(
-      regex: /\u{E000}(.*?)\u{E001}/,
-      tokenType: .discordSubtext
-    )
-  }
+  fileprivate static let discordSubtext: Self = .init(
+    regex: /\u{E000}(.*?)\u{E001}/,
+    tokenType: .discordSubtext
+  )
 }
 
 extension PatternTokenizer.TokenType {
