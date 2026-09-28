@@ -67,7 +67,7 @@ struct TextLinkInteraction: ViewModifier {
           openURL(url)
           entityTapAction?(
             url,
-            run.typographicBounds.rect.offsetBy(dx: globalOrigin.x, dy: globalOrigin.y)
+            run.typographicBounds.rect.offsetBy(dx: origin.x, dy: origin.y)
           )
         }
     }

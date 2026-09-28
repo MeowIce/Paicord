@@ -125,7 +125,7 @@
         return
       }
       openURL(url)
-      entityTapAction?(url, bounds.offsetBy(dx: globalOrigin.x, dy: globalOrigin.y))
+      entityTapAction?(url, bounds)
     }
 
     @objc private func share(_ sender: Any?) {

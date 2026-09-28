@@ -122,40 +122,24 @@ public struct StructuredText: View {
     self.markup = markup
     self.parser = parser
     self.revision = AnyHashable(revision)
+    let initialValue = (try? parser.attributedString(for: markup)) ?? AttributedString()
+    self._attributedString = State(initialValue: initialValue)
   }
 
   public var body: some View {
-    if #available(macOS 26.0, *) {  // fixes a warning.
-      WithAttachments(attributedString) {
-        BlockContent(content: $0)
-          .modifier(TextSelectionInteraction())
-          .modifier(TextSelectionCoordination())
-      }
-      .coordinateSpace(.textContainer)
-      .onChange(of: markup, initial: true) {
-        markupDidChange(markup)
-      }
-      .onChange(of: revision) {
-        markupDidChange(markup)
-      }
-      // Disable line limit to avoid per-fragment truncation
-      .lineLimit(nil)
-    } else {
-      WithAttachments(attributedString) {
-        BlockContent(content: $0)
-          .modifier(TextSelectionInteraction())
-          .modifier(TextSelectionCoordination())
-      }
-      .coordinateSpace(.textContainer)
-      .onChange(of: markup, initial: true) {
-        markupDidChange(markup)
-      }
-      .onChange(of: revision) {
-        markupDidChange(markup)
-      }
-      // Disable line limit to avoid per-fragment truncation
-      .lineLimit(nil)
+    WithAttachments(attributedString) {
+      BlockContent(content: $0)
+        .modifier(TextSelectionInteraction())
+        .modifier(TextSelectionCoordination())
     }
+    .coordinateSpace(.textContainer)
+    .onChange(of: markup) {
+      markupDidChange(markup)
+    }
+    .onChange(of: revision) {
+      markupDidChange(markup)
+    }
+    .lineLimit(nil)
   }
 
   private func markupDidChange(_ markup: String) {

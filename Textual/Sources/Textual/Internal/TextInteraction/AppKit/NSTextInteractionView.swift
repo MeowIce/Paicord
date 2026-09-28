@@ -76,7 +76,7 @@
       case 1:
         if let (url, bounds) = model.urlAndBounds(for: location) {
           openURL(url)
-          entityTapAction?(url, bounds.offsetBy(dx: globalOrigin.x, dy: globalOrigin.y))
+          entityTapAction?(url, bounds)
         } else {
           resetSelection()
         }
