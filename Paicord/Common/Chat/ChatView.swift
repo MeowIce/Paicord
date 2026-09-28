@@ -20,7 +20,6 @@ struct ChatView: View {
   @Environment(\.theme) var theme
 
   @State private var currentScrollPosition: MessageSnowflake?
-  @State private var isScrolling: Bool = false
 
   var drain: MessageDrainStore { gw.messageDrain }
 
@@ -31,9 +30,6 @@ struct ChatView: View {
 
   #if os(macOS)
     @FocusState private var isChatFocused: Bool
-
-    @ViewStorage private var scrollStopWorkItem: DispatchWorkItem?
-    @ViewStorage private var scrollObserver: NSObjectProtocol?
   #endif
 
   var body: some View {
@@ -66,8 +62,7 @@ struct ChatView: View {
               MessageCell(
                 for: msg,
                 prior: prior,
-                channel: vm,
-                scrolling: isScrolling
+                channel: vm
               )
             }
           }
@@ -122,33 +117,6 @@ struct ChatView: View {
           )
           InputBar.inputVMs[vm.channelId]?.uploadItems = []
           return .handled
-        }
-        .introspect(.scrollView, on: .macOS(.v14...)) { scrollView in
-
-          let clipView = scrollView.contentView
-
-          guard scrollObserver == nil else { return }
-          clipView.postsBoundsChangedNotifications = true
-
-          scrollObserver = NotificationCenter.default.addObserver(
-            forName: NSView.boundsDidChangeNotification,
-            object: clipView,
-            queue: .main
-          ) { _ in
-            DispatchQueue.main.async {
-              isScrolling = true
-            }
-
-            scrollStopWorkItem?.cancel()
-            let work = DispatchWorkItem {
-              isScrolling = false
-            }
-            scrollStopWorkItem = work
-            DispatchQueue.main.asyncAfter(
-              deadline: .now() + 0.12,
-              execute: work
-            )
-          }
         }
       #endif
       .scrollPosition(id: $currentScrollPosition, anchor: .bottom)  // causes issues with input bar height changes:
