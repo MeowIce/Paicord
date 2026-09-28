@@ -37,7 +37,7 @@ extension SettingsView {
           scanMode: .once,
           showViewfinder: true,
           shouldVibrateOnSuccess: true,
-          isTorchOn: false,
+          isTorchOn: false
         ) {
           response in
           switch response {

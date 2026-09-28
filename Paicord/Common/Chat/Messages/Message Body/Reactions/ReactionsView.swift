@@ -8,7 +8,6 @@
 
 import Collections
 import PaicordLib
-import Playgrounds
 import SwiftUIX
 
 struct ReactionsView: View {

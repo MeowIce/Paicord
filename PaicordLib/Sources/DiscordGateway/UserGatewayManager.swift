@@ -835,13 +835,12 @@ extension UserGatewayManager {
     //            )
     //          )
     //        )
-    // use QoS Heartbeat instead
     self.send(
       message: .init(
         payload: .init(
           opcode: .qosHeartbeat,
-          data: .qosHeartbeat(.init(seq: self.sequenceNumber, qos: .init()))  // TODO: use actual client focus data instead
-        ),
+          data: .qosHeartbeat(.init(seq: self.sequenceNumber, qos: .init()))
+        )
       )
     )
     Task {

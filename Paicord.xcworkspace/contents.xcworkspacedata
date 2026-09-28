@@ -10,4 +10,10 @@
    <FileRef
       location = "group:Textual">
    </FileRef>
+   <FileRef
+      location = "group:Packages/SettingsKit">
+   </FileRef>
+   <FileRef
+      location = "group:Packages/Nuke">
+   </FileRef>
 </Workspace>

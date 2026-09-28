@@ -255,20 +255,9 @@ struct LoginForm: View {
         }
       }
       .task(id: data) {
-        var filter: CIFilter
-        if #available(iOS 26.0, macOS 26.0, *) {
-          let rfilter = CIFilter.roundedQRCodeGenerator()
-          rfilter.roundedData = true
-          rfilter.roundedMarkers = 2
-          rfilter.message = data.data(using: .ascii) ?? Data()
-          rfilter.correctionLevel = "L"
-          filter = rfilter
-        } else {
-          let nfilter = CIFilter.qrCodeGenerator()
-          nfilter.message = data.data(using: .ascii) ?? Data()
-          nfilter.correctionLevel = "L"
-          filter = nfilter
-        }
+        let filter = CIFilter.qrCodeGenerator()
+        filter.message = data.data(using: .ascii) ?? Data()
+        filter.correctionLevel = "L"
 
         if let outputImage = filter.outputImage {
           let context = CIContext()

@@ -175,18 +175,6 @@ struct ChatView: View {
     .scrollDismissesKeyboard(.interactively)
     .background(theme.common.secondaryBackground)
     .ignoresSafeArea(.keyboard, edges: .all)
-    #if os(macOS)
-      .onDisappear {
-        if let observer = scrollObserver {
-          NotificationCenter.default.removeObserver(observer)
-          scrollObserver = nil
-        }
-
-        scrollStopWorkItem?.cancel()
-        scrollStopWorkItem = nil
-      }
-    #endif
-
     .toolbar {
       ToolbarItem(placement: .navigation) {
         ChannelHeader(vm: vm)

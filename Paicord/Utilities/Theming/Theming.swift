@@ -6,7 +6,6 @@
 //  Copyright © 2025 Lakhan Lothiyi.
 //
 
-import Playgrounds
 import SwiftUIX
 
 @Observable
@@ -250,7 +249,7 @@ extension Theming {
         codeBlockBorder: .init(
           light: Color(hexadecimal6: 0xDCDDDE),
           dark: Color(hexadecimal6: 0x373745)
-        ),
+        )
       )
     ),
     // below are just auto's variants with constants for light and dark respectively
@@ -281,7 +280,7 @@ extension Theming {
         blockquoteCapsule: .quaternaryLabel,
         codeSpanBackground: .gray.opacity(0.2),
         codeBlockBackground: .init(hexadecimal6: 0xF1F3F5),
-        codeBlockBorder: .init(hexadecimal6: 0xDCDDDE),
+        codeBlockBorder: .init(hexadecimal6: 0xDCDDDE)
       )
     ),
     .init(
@@ -311,7 +310,7 @@ extension Theming {
         blockquoteCapsule: .quaternaryLabel,
         codeSpanBackground: .gray.opacity(0.2),
         codeBlockBackground: .init(hexadecimal6: 0x1f202f),
-        codeBlockBorder: .init(hexadecimal6: 0x373745),
+        codeBlockBorder: .init(hexadecimal6: 0x373745)
       )
     ),
   ]
@@ -332,32 +331,15 @@ extension Theming {
     struct ImageScaling: Sendable, OptionSet, Codable, Hashable, Equatable {
       let rawValue: Int
 
-      // allows image to be resized
       static let resizable = ImageScaling(rawValue: 1 << 0)
-      // scales the image to completely fill the container, image may be stretched or cropped (depends on if resizable is set)
       static let fill = ImageScaling(rawValue: 1 << 1)
-      // scales the image to fit within the container, image may be stretched (depends on if resizable is set)
       static let fit = ImageScaling(rawValue: 1 << 2)
-      // tiles the image to fill the container, image scale is not changed
       static let tile = ImageScaling(rawValue: 1 << 3)
 
-      // below options require 'tile' to be set
-
-      // width of image fits container, tiles to fill height
       static let tilingFitWidth = [Self.tile, ImageScaling(rawValue: 1 << 4)]
-      // height of image fits container, tiles to fill width
       static let tilingFitHeight = [
         Self.tile, ImageScaling(rawValue: 1 << 5),
       ]
     }
   }
-}
-
-#Playground {
-  let theme = Theming.defaultThemes.first!
-  let encoder = JSONEncoder()
-  encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-  let data = try! encoder.encode(theme)
-  let jsonString = String(data: data, encoding: .utf8)!
-  print(jsonString)
 }

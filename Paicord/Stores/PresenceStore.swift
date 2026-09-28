@@ -154,7 +154,7 @@ class PresenceStore: DiscordDataStore {
 
   func setPresence(
     status: Gateway.Status? = nil,
-    activities: [Gateway.Activity]? = nil,
+    activities: [Gateway.Activity]? = nil
   ) async {
     guard let gateway = gateway?.gateway else { return }
     if status == nil && activities == nil {

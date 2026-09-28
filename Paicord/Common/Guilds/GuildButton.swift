@@ -7,7 +7,6 @@
 //
 
 import PaicordLib
-import Playgrounds
 import SwiftUIX
 
 /// Shows a guild folder or standalone guild

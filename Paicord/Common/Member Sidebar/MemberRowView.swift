@@ -53,7 +53,7 @@ extension MemberSidebarView {
         HStack {
           Profile.AvatarWithPresence(
             member: member,
-            user: member?.user ?? user,
+            user: member?.user ?? user
           )
           .profileShowsAvatarDecoration()
           .profileHidesOfflinePresence(true)

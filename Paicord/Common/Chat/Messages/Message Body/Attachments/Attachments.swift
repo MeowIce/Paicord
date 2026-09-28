@@ -7,7 +7,6 @@
 //
 
 import AVKit
-import Loupe
 import PaicordLib
 import Speech
 import SwiftUIX
@@ -76,15 +75,11 @@ extension MessageCell {
         // audio files
         ForEach(audioAttachments) { audio in
           AttachmentAudioPlayer(attachment: audio)
-            .debugRender()
-            .debugCompute()
         }
 
         // files
         ForEach(fileAttachments) { file in
           FileAttachmentView(attachment: file)
-            .debugRender()
-            .debugCompute()
         }
       }
     }
@@ -117,8 +112,6 @@ extension MessageCell {
           }
         }
         .buttonStyle(.borderless)
-        .debugRender()
-        .debugCompute()
       }
     }
 

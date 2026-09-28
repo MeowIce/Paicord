@@ -10,6 +10,7 @@ import Collections
 import Foundation
 import PaicordLib
 import SwiftPrettyPrint
+import SwiftUI
 
 typealias MemberBox = ObservableBox<Guild.PartialMember>
 typealias RoleBox = ObservableBox<Role>

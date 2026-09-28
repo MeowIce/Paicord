@@ -651,7 +651,7 @@ extension DiscordClient {
   /// https://docs.discord.food/resources/message#delete-attachment
   @inlinable
   public func deleteAttachment(
-    uploadFilename: String,
+    uploadFilename: String
   ) async throws -> DiscordHTTPResponse {
     let endpoint = UserAPIEndpoint.deleteAttachment(
       uploadFilename: uploadFilename

@@ -2731,7 +2731,7 @@ extension DiscordClient {
             )
         ]
       ),
-      payload: payload,
+      payload: payload
     )
   }
 

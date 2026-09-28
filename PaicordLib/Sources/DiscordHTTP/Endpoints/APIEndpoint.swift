@@ -874,8 +874,7 @@ public enum APIEndpoint: Endpoint {
     case .listMessageReactionsByEmoji(
       let channelId,
       let messageId,
-      let emojiName,
-
+      let emojiName
     ):
       let channelId = channelId.rawValue
       let messageId = messageId.rawValue
@@ -2747,7 +2746,7 @@ public enum APIEndpoint: Endpoint {
     case .addMessageReaction(
       let channelId,
       let messageId,
-      let emojiName,
+      let emojiName
     ):
       return [
         channelId.rawValue, messageId.rawValue, emojiName,

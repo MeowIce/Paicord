@@ -90,7 +90,6 @@
 		AA47AF342EDEF1DC008A50C9 /* LanguageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA47AF332EDEF1DC008A50C9 /* LanguageSection.swift */; };
 		AA47AF362EDEF1E2008A50C9 /* AdvancedSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA47AF352EDEF1E2008A50C9 /* AdvancedSection.swift */; };
 		AA47AF3B2EDEF990008A50C9 /* ProfilesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA47AF3A2EDEF98D008A50C9 /* ProfilesSection.swift */; };
-		AA47AF622EDF1FF7008A50C9 /* Conditionals in Frameworks */ = {isa = PBXBuildFile; productRef = AA47AF612EDF1FF7008A50C9 /* Conditionals */; };
 		AA49F5172EF2CF7200C46339 /* NitroHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA49F5162EF2CF6E00C46339 /* NitroHelper.swift */; };
 		AA5CA6522E9BCCFF00C7C82A /* Maths.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5CA6512E9BCCFC00C7C82A /* Maths.swift */; };
 		AA5CA6542E9BD37D00C7C82A /* ComponentsV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5CA6532E9BD37500C7C82A /* ComponentsV2.swift */; };
@@ -113,7 +112,6 @@
 		AA7B38F42EB50F0100CA4A3C /* MessageDrainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7B38F32EB50EFD00CA4A3C /* MessageDrainStore.swift */; };
 		AA8ABACA2F2A794E00557278 /* SwiftEmoji in Frameworks */ = {isa = PBXBuildFile; productRef = AA8ABAC92F2A794E00557278 /* SwiftEmoji */; };
 		AA8ABACC2F2A794E00557278 /* SwiftEmojiIndex in Frameworks */ = {isa = PBXBuildFile; productRef = AA8ABACB2F2A794E00557278 /* SwiftEmojiIndex */; };
-		AA8ABACF2F2A79B500557278 /* Loupe in Frameworks */ = {isa = PBXBuildFile; productRef = AA8ABACE2F2A79B500557278 /* Loupe */; };
 		AA8ABAD22F2A7A0800557278 /* MijickCamera in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = AA8ABAD12F2A7A0800557278 /* MijickCamera */; };
 		AA9C81832E6660BE0086B1DA /* GuildButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9C81822E6660BE0086B1DA /* GuildButton.swift */; };
 		AA9C81862E66670E0086B1DA /* CornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9C81852E66670E0086B1DA /* CornerRadius.swift */; };
@@ -326,7 +324,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA8ABACF2F2A79B500557278 /* Loupe in Frameworks */,
 				AAFACE0400000000000000A4 /* Nuke in Frameworks */,
 				AAFACE0500000000000000A5 /* NukeUI in Frameworks */,
 				AA8ABAD22F2A7A0800557278 /* MijickCamera in Frameworks */,
@@ -336,7 +333,6 @@
 				AA8ABACA2F2A794E00557278 /* SwiftEmoji in Frameworks */,
 				AAD446A22ED07916006CB07C /* SettingsKit in Frameworks */,
 				579DF34B2E6D9B9800BD8B97 /* SwiftUIX in Frameworks */,
-				AA47AF622EDF1FF7008A50C9 /* Conditionals in Frameworks */,
 				AA21D2832EAA557C00C75093 /* Sparkle in Frameworks */,
 				AAA9EEFD2F23062B00770CAD /* CodeScanner in Frameworks */,
 				572B694C2E7079FB00BCED00 /* PaicordLib in Frameworks */,
@@ -1066,11 +1062,9 @@
 				AAB22FD72EAD0A2400413310 /* SwiftPrettyPrint */,
 				AAB22FDA2EAD86B700413310 /* ColorCube */,
 				AAD446A12ED07916006CB07C /* SettingsKit */,
-				AA47AF612EDF1FF7008A50C9 /* Conditionals */,
 				AAA9EEFC2F23062B00770CAD /* CodeScanner */,
 				AA8ABAC92F2A794E00557278 /* SwiftEmoji */,
 				AA8ABACB2F2A794E00557278 /* SwiftEmojiIndex */,
-				AA8ABACE2F2A79B500557278 /* Loupe */,
 				AA8ABAD12F2A7A0800557278 /* MijickCamera */,
 			);
 			productName = PaiCord;
@@ -1110,15 +1104,11 @@
 				57CDD87D2E71CB6000022203 /* XCRemoteSwiftPackageReference "hcaptcha" */,
 				AA1878F72E81FC1A009C7E40 /* XCRemoteSwiftPackageReference "FLEX" */,
 				AA1378072E969A9000100969 /* XCRemoteSwiftPackageReference "lottie-spm" */,
-				AAFACE0100000000000000A1 /* XCRemoteSwiftPackageReference "Nuke" */,
 				AA21D2812EAA557C00C75093 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				AAB22FD62EAD0A2300413310 /* XCRemoteSwiftPackageReference "SwiftPrettyPrint" */,
 				AAB22FD92EAD86B600413310 /* XCRemoteSwiftPackageReference "ColorCube" */,
-				AAD446A02ED07916006CB07C /* XCRemoteSwiftPackageReference "SettingsKit" */,
-				AA47AF602EDF1FF7008A50C9 /* XCRemoteSwiftPackageReference "Conditionals" */,
 				AAA9EEFB2F23062B00770CAD /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				AA8ABAC82F2A794E00557278 /* XCRemoteSwiftPackageReference "SwiftEmoji" */,
-				AA8ABACD2F2A79B500557278 /* XCRemoteSwiftPackageReference "Loupe" */,
 				AA8ABAD02F2A7A0800557278 /* XCRemoteSwiftPackageReference "Camera" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -1613,28 +1603,12 @@
 				minimumVersion = 2.8.0;
 			};
 		};
-		AA47AF602EDF1FF7008A50C9 /* XCRemoteSwiftPackageReference "Conditionals" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Aeastr/Conditionals";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
-			};
-		};
 		AA8ABAC82F2A794E00557278 /* XCRemoteSwiftPackageReference "SwiftEmoji" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Aeastr/SwiftEmoji";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.1.0;
-			};
-		};
-		AA8ABACD2F2A79B500557278 /* XCRemoteSwiftPackageReference "Loupe" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Aeastr/Loupe";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
 			};
 		};
 		AA8ABAD02F2A7A0800557278 /* XCRemoteSwiftPackageReference "Camera" */ = {
@@ -1677,28 +1651,12 @@
 				kind = branch;
 			};
 		};
-		AAD446A02ED07916006CB07C /* XCRemoteSwiftPackageReference "SettingsKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Aeastr/SettingsKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.1;
-			};
-		};
 		AAEEC7202E6515C400EB5FC9 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
 			requirement = {
 				branch = master;
 				kind = branch;
-			};
-		};
-		AAFACE0100000000000000A1 /* XCRemoteSwiftPackageReference "Nuke" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kean/Nuke.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 13.0.6;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1747,11 +1705,6 @@
 			package = AA21D2812EAA557C00C75093 /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
 		};
-		AA47AF612EDF1FF7008A50C9 /* Conditionals */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA47AF602EDF1FF7008A50C9 /* XCRemoteSwiftPackageReference "Conditionals" */;
-			productName = Conditionals;
-		};
 		AA8ABAC92F2A794E00557278 /* SwiftEmoji */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA8ABAC82F2A794E00557278 /* XCRemoteSwiftPackageReference "SwiftEmoji" */;
@@ -1761,11 +1714,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA8ABAC82F2A794E00557278 /* XCRemoteSwiftPackageReference "SwiftEmoji" */;
 			productName = SwiftEmojiIndex;
-		};
-		AA8ABACE2F2A79B500557278 /* Loupe */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA8ABACD2F2A79B500557278 /* XCRemoteSwiftPackageReference "Loupe" */;
-			productName = Loupe;
 		};
 		AA8ABAD12F2A7A0800557278 /* MijickCamera */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1794,7 +1742,6 @@
 		};
 		AAD446A12ED07916006CB07C /* SettingsKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AAD446A02ED07916006CB07C /* XCRemoteSwiftPackageReference "SettingsKit" */;
 			productName = SettingsKit;
 		};
 		AAEEC7212E6515C400EB5FC9 /* KeychainAccess */ = {
@@ -1804,12 +1751,10 @@
 		};
 		AAFACE0200000000000000A2 /* Nuke */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AAFACE0100000000000000A1 /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = Nuke;
 		};
 		AAFACE0300000000000000A3 /* NukeUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AAFACE0100000000000000A1 /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeUI;
 		};
 /* End XCSwiftPackageProductDependency section */

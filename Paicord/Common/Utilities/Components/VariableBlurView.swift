@@ -252,7 +252,7 @@ public struct VariableBlurView: AppKitOrUIKitViewRepresentable {
   public init(
     gradientMask: AppKitOrUIKitImage =
       VariableBlurViewConstants.defaultGradientMask,
-    blurRadius: CGFloat = 20,
+    blurRadius: CGFloat = 20
   ) {
     self.gradientMask = gradientMask
     self.blurRadius = blurRadius

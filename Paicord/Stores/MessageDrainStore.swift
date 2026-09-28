@@ -289,7 +289,7 @@ class MessageDrainStore: DiscordDataStore {
             "[SendTask Attachments] Discord returned \(createdAttachments.count) upload URLs"
           )
 
-          await withThrowingTaskGroup { group in
+          await withThrowingTaskGroup(of: Void.self) { group in
             for (index, attachment) in createdAttachments {
               let item = vm.uploadItems[index]
 

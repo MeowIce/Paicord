@@ -8,7 +8,6 @@
 
 import AVKit
 import Foundation
-import Loupe
 import PaicordLib
 import SwiftPrettyPrint
 import SwiftUIX
@@ -69,8 +68,6 @@ extension MessageCell {
             Text("Unsupported embed type: \(embed.type.debugDescription)")
           }
         }
-        .debugRender()
-        .debugCompute()
       }
 
       private func openViewer(showing items: [DiscordMedia], at index: Int) {

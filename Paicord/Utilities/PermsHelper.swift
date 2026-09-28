@@ -8,7 +8,6 @@
 
 import Foundation
 import PaicordLib
-import Playgrounds
 
 enum PermissionsHelper {
   static func computeBasePermissions(
