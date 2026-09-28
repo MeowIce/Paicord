@@ -106,7 +106,12 @@ class GuildStore: DiscordDataStore {
     roleBoxes.removeValue(forKey: id)
   }
 
-  // MARK: - Initializers, setup etc.
+  func memberTopColor(for member: Guild.PartialMember) -> Color? {
+    guard let roles = member.roles, !roles.isEmpty else { return nil }
+    let sortedRoles = roles.compactMap { roleBoxes[$0]?.value }
+      .sorted(by: { $0.position > $1.position })
+    return sortedRoles.first(where: { $0.color.value != 0 })?.color.asColor()
+  }
 
   init(id: GuildSnowflake, from guild: Guild?) {
     self.guildId = id

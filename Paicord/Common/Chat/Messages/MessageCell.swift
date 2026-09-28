@@ -34,25 +34,18 @@ struct MessageCell: View {
   }
 
   var userMentioned: Bool {
-    let gw = GatewayStore.shared
-    guard let currentUserID = gw.user.currentUser?.id else { return false }
-
-    if !message.mention_everyone,
-      message.mentions.isEmpty,
-      message.mention_roles.isEmpty
-    {
+    if !message.mention_everyone && message.mentions.isEmpty && message.mention_roles.isEmpty {
       return false
     }
-
     if message.mention_everyone { return true }
-
+    let gw = GatewayStore.shared
+    guard let currentUserID = gw.user.currentUser?.id else { return false }
     if message.mentions.contains(where: { $0.id == currentUserID }) {
       return true
     }
-
-    let userRoles = channelStore.guildStore?.member(currentUserID)?.roles ?? []
-    for roleID in message.mention_roles {
-      if userRoles.contains(roleID) { return true }
+    if !message.mention_roles.isEmpty, let userRoles = channelStore.guildStore?.member(currentUserID)?.roles {
+      let roleSet = Set(userRoles)
+      return message.mention_roles.contains(where: { roleSet.contains($0) })
     }
     return false
   }
