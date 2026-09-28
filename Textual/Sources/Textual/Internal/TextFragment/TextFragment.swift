@@ -1,32 +1,5 @@
 import SwiftUI
 
-// MARK: - Overview
-//
-// TextFragment renders attributed content as SwiftUI.Text with support for inline
-// attachments, links, and selection. It uses a TextBuilder to construct and cache
-// Text values, minimizing rebuilds during resize by keying on attachment sizes.
-//
-// Attachments are represented as placeholder images tagged with AttachmentAttribute. The
-// actual attachment views are rendered in an overlay using the resolved Text.Layout
-// geometry. Four modifiers are applied at the fragment level:
-//
-// - TextSelectionBackground renders selection highlights on macOS
-// - RoundedInlineBackground draws a rounded background behind runs with a backgroundColor
-//   attribute (inline code spans, mentions, and other custom entities)
-// - AttachmentOverlay draws attachments at their run locations with selection-aware dimming
-// - TextLinkInteraction handles tap gestures on links
-//
-// These overlays use backgroundPreferenceValue and overlayPreferenceValue to access
-// Text.Layout and render in fragment-local coordinates. Fragment-level overlays enable
-// coordinate space isolation and keep scrollable regions interactive.
-//
-// An ancestor view must define a named coordinate space (.textContainer) for the text
-// container. TextFragment uses onGeometryChange to observe the container size and rebuild
-// Text when attachment sizes need to change.
-//
-// TextFragment is used by InlineText and StructuredText (via BlockContent) to render
-// attributed content with inline attachments, links, and selection.
-
 struct TextFragment<Content: AttributedStringProtocol>: View {
   @Environment(\.textEnvironment) private var textEnvironment
   @State private var textBuilder: TextBuilder?
@@ -38,12 +11,13 @@ struct TextFragment<Content: AttributedStringProtocol>: View {
   }
 
   var body: some View {
-    taggedText
+    let builder = currentBuilder
+    taggedText(for: builder.text)
       .onGeometryChange(for: CGSize?.self, of: \.textContainerSize) { size in
-        guard let size, let textBuilder else { return }
-        textBuilder.sizeChanged(size, environment: textEnvironment)
+        guard let size else { return }
+        builder.sizeChanged(size, environment: textEnvironment)
       }
-      .onChange(of: content, initial: true) { _, newValue in
+      .onChange(of: content) { _, newValue in
         self.textBuilder = TextBuilder(newValue, environment: textEnvironment)
       }
       .modifier(TextSelectionBackground())
@@ -52,16 +26,19 @@ struct TextFragment<Content: AttributedStringProtocol>: View {
       .modifier(TextLinkInteraction())
   }
 
-  @ViewBuilder private var taggedText: some View {
+  private var currentBuilder: TextBuilder {
+    if let textBuilder {
+      return textBuilder
+    }
+    return TextBuilder(content, environment: textEnvironment)
+  }
+
+  @ViewBuilder private func taggedText(for text: Text) -> some View {
     if #available(iOS 18, macOS 15, tvOS 18, watchOS 11, visionOS 2, *) {
       text.customAttribute(TextFragmentAttribute())
     } else {
       text
     }
-  }
-
-  private var text: Text {
-    textBuilder?.text ?? Text(verbatim: "")
   }
 }
 

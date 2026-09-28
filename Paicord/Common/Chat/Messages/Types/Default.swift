@@ -67,6 +67,7 @@ extension MessageCell {
 
     static func == (lhs: DefaultMessage, rhs: DefaultMessage) -> Bool {
       lhs.message.id == rhs.message.id
+        && lhs.inline == rhs.inline
         && lhs.message.edited_timestamp == rhs.message.edited_timestamp
         && lhs.message.embeds == rhs.message.embeds
     }

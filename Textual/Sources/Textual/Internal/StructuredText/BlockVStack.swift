@@ -49,12 +49,13 @@ extension StructuredText {
     }
 
     var body: some View {
-      // Read the block spacing preference and apply it as a layout value
       content
         .onPreferenceChange(BlockSpacingKey.self) { value in
           MainActor.assumeIsolated {
-            blockSpacing =
-              listItemSpacingEnabled ? resolvedListItemSpacing : value
+            let target = listItemSpacingEnabled ? resolvedListItemSpacing : value
+            if blockSpacing != target {
+              blockSpacing = target
+            }
           }
         }
         .layoutValue(key: BlockSpacingKey.self, value: blockSpacing)

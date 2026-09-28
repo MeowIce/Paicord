@@ -1,17 +1,26 @@
 import SwiftUI
 
-// MARK: - Overview
-//
-// `TextSelectionBackground` draws selection highlights behind a `Text` fragment.
-//
-// The platform selection interaction stores a `TextSelectionModel` in the environment at fragment
-// scope. This modifier reads the fragment’s anchored `Text.Layout` and forwards it to the AppKit
-// selection view so it can convert the current selected range into highlight rectangles.
-
 struct TextSelectionBackground: ViewModifier {
   func body(content: Content) -> some View {
     #if TEXTUAL_ENABLE_TEXT_SELECTION && canImport(AppKit) && !targetEnvironment(macCatalyst)
       if #available(macOS 15, *) {
+        content.modifier(AppKitTextSelectionBackgroundBody())
+      } else {
+        content
+      }
+    #else
+      content
+    #endif
+  }
+}
+
+#if TEXTUAL_ENABLE_TEXT_SELECTION && canImport(AppKit) && !targetEnvironment(macCatalyst)
+  @available(macOS 15, *)
+  private struct AppKitTextSelectionBackgroundBody: ViewModifier {
+    @Environment(TextSelectionModel.self) private var textSelectionModel: TextSelectionModel?
+
+    func body(content: Content) -> some View {
+      if textSelectionModel?.selectedRange != nil {
         content
           .backgroundPreferenceValue(Text.LayoutKey.self) { value in
             if let anchoredLayout = value.first {
@@ -26,8 +35,6 @@ struct TextSelectionBackground: ViewModifier {
       } else {
         content
       }
-    #else
-      content
-    #endif
+    }
   }
-}
+#endif

@@ -116,6 +116,8 @@ public struct InlineText: View {
     self.markup = markup
     self.parser = parser
     self.revision = AnyHashable(revision)
+    let initialValue = (try? parser.attributedString(for: markup)) ?? AttributedString()
+    self._attributedString = State(initialValue: initialValue)
   }
 
   public var body: some View {
@@ -126,7 +128,7 @@ public struct InlineText: View {
       }
     }
     .coordinateSpace(.textContainer)
-    .onChange(of: markup, initial: true) { _, value in
+    .onChange(of: markup) { _, value in
       self.attributedString = (try? parser.attributedString(for: value)) ?? .init()
     }
     .onChange(of: revision) {

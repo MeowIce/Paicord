@@ -1,21 +1,18 @@
 import SwiftUI
 
-// MARK: - Overview
-//
-// `TextLinkInteraction` adds lightweight link tapping to a `Text` fragment.
-//
-// SwiftUI resolves a `Text.Layout` for each fragment and publishes it through the `Text.LayoutKey`
-// preference. This modifier reads the anchored layout, converts tap locations to layout-local
-// coordinates, and looks for the first run whose typographic bounds contains the tap. When a run
-// has a `url`, the modifier invokes the environment’s `openURL` action.
-//
-// It additionally surfaces the tapped run's bounds (in the `.global` coordinate space, so an
-// ancestor view can convert it into its own local coordinates) through `textualEntityTapAction`,
-// so consumers that need to anchor UI (e.g. a popover) near the tapped entity don't have to
-// reimplement the hit-testing themselves. This is purely additive: `openURL` is always invoked
-// first, exactly as before — consumers using a custom URL scheme for entity links should install
-// their own `OpenURLAction` that returns `.handled` for that scheme, otherwise the system will try
-// (and fail) to open it externally.
+@available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, *)
+extension Text.Layout {
+  var hasLinks: Bool {
+    for line in self {
+      for run in line {
+        if run.url != nil {
+          return true
+        }
+      }
+    }
+    return false
+  }
+}
 
 struct TextLinkInteraction: ViewModifier {
   @Environment(\.openURL) private var openURL
@@ -26,14 +23,13 @@ struct TextLinkInteraction: ViewModifier {
       if #available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, *) {
         content
           .overlayPreferenceValue(Text.LayoutKey.self) { value in
-            if let anchoredLayout = value.first {
+            if let anchoredLayout = value.first, anchoredLayout.layout.hasLinks {
               GeometryReader { geometry in
                 Color.clear
                   .contentShape(.rect)
                   .gesture(
                     tap(
                       origin: geometry[anchoredLayout.origin],
-                      globalOrigin: geometry.frame(in: .global).origin,
                       layout: anchoredLayout.layout
                     )
                   )
@@ -50,7 +46,7 @@ struct TextLinkInteraction: ViewModifier {
 
   #if TEXTUAL_ENABLE_LINKS
     @available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, *)
-    private func tap(origin: CGPoint, globalOrigin: CGPoint, layout: Text.Layout) -> some Gesture {
+    private func tap(origin: CGPoint, layout: Text.Layout) -> some Gesture {
       SpatialTapGesture()
         .onEnded { value in
           let localPoint = CGPoint(
