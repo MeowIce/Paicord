@@ -41,7 +41,16 @@ extension View {
 
 /// Collection of ui components for profiles
 enum Profile {
-  struct Avatar: View {
+  struct Avatar: View, Equatable {
+    static func == (lhs: Avatar, rhs: Avatar) -> Bool {
+      lhs.member?.avatar == rhs.member?.avatar
+        && lhs.member?.user?.id == rhs.member?.user?.id
+        && lhs.user?.id == rhs.user?.id
+        && lhs.user?.avatar == rhs.user?.avatar
+        && lhs.user?.avatar_decoration_data == rhs.user?.avatar_decoration_data
+        && lhs.member?.avatar_decoration_data == rhs.member?.avatar_decoration_data
+    }
+
     @Environment(\.guildStore) var guildStore
     let member: Guild.PartialMember?
     let user: PartialUser?

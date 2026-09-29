@@ -11,7 +11,10 @@ import PaicordLib
 import SwiftUIX
 
 extension MessageCell {
-  struct StickersView: View {
+  struct StickersView: View, Equatable {
+    static func == (lhs: StickersView, rhs: StickersView) -> Bool {
+      lhs.stickers == rhs.stickers
+    }
     var stickers: [StickerItem]
     var body: some View {
       VStack {

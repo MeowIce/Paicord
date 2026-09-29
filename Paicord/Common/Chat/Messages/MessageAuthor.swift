@@ -28,6 +28,7 @@ extension MessageCell {
             member: guildstoremember ?? message.member,
             user: message.author?.toPartialUser()
           )
+          .equatable()
           .profileShowsAvatarDecoration()
           .frame(width: avatarSize, height: avatarSize)
         }

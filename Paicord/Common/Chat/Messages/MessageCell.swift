@@ -9,9 +9,17 @@
 import PaicordLib
 import SwiftUIX
 
-struct MessageCell: View {
+struct MessageCell: View, Equatable {
+  static func == (lhs: MessageCell, rhs: MessageCell) -> Bool {
+    lhs.message.id == rhs.message.id
+      && lhs.priorMessage?.id == rhs.priorMessage?.id
+      && lhs.message.edited_timestamp == rhs.message.edited_timestamp
+      && lhs.message.content == rhs.message.content
+      && lhs.message.attachments == rhs.message.attachments
+      && lhs.message.embeds == rhs.message.embeds
+      && lhs.message.reactions == rhs.message.reactions
+  }
 
-  /// Controls the size of the avatar in the message cell.
   #if os(iOS)
     static let avatarSize: CGFloat = 40
   #elseif os(macOS)

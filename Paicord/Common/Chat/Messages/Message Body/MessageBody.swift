@@ -63,15 +63,15 @@ extension MessageCell {
             .equatable()
         }
 
-        // Stickers
         if let stickers = message.sticker_items, !stickers.isEmpty {
           StickersView(stickers: stickers)
+            .equatable()
         }
 
-        // Reactions
         let reactions = channelStore.reactions[message.id, default: [:]]
         if !reactions.isEmpty {
           ReactionsView(reactions: reactions)
+            .equatable()
         }
 
         if let msgSnapshot = message.partialMessageForSnapshot() {

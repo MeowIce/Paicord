@@ -97,6 +97,7 @@ struct ChatView: View {
                 prior: pair.prior,
                 channel: vm
               )
+              .equatable()
             }
           }
 

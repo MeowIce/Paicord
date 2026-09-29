@@ -10,7 +10,11 @@ import Collections
 import PaicordLib
 import SwiftUIX
 
-struct ReactionsView: View {
+struct ReactionsView: View, Equatable {
+  static func == (lhs: ReactionsView, rhs: ReactionsView) -> Bool {
+    lhs.reactions == rhs.reactions
+  }
+
   @Environment(\.gateway) var gw
   @Environment(\.channelStore) var channelStore
   let reactions: OrderedDictionary<Emoji, ChannelStore.Reaction>
