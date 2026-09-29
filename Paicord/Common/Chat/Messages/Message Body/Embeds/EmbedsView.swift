@@ -13,7 +13,12 @@ import SwiftPrettyPrint
 import SwiftUIX
 
 extension MessageCell {
-  struct EmbedsView: View {
+  struct EmbedsView: View, Equatable {
+    static func == (lhs: EmbedsView, rhs: EmbedsView) -> Bool {
+      lhs.embeds == rhs.embeds
+        && lhs.message?.id == rhs.message?.id
+    }
+
     var embeds: [Embed]
     var message: DiscordChannel.PartialMessage? = nil
 
@@ -21,7 +26,7 @@ extension MessageCell {
     private let maxHeight: CGFloat = 300
 
     var body: some View {
-      LazyVStack(alignment: .leading, spacing: 8) {
+      VStack(alignment: .leading, spacing: 8) {
         ForEach(embeds.combineEmbedRuns(), id: \.embed) { embed in
           EmbedRow(embedData: embed, message: message)
         }

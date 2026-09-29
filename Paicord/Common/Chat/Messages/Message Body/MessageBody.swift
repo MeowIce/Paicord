@@ -51,16 +51,16 @@ extension MessageCell {
           }
         }
 
-        // Attachments
         let attachments = message.attachments ?? []
         if !attachments.isEmpty {
           AttachmentsView(message: message, attachments: attachments)
+            .equatable()
         }
 
-        // Embeds
         let embeds = message.embeds ?? []
         if !embeds.isEmpty {
           EmbedsView(embeds: embeds, message: message)
+            .equatable()
         }
 
         // Stickers

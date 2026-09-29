@@ -84,11 +84,14 @@ enum PaicordImagePipeline {
   static func configure() {
     ImageDecoderRegistry.shared.register { _ in AnimatableImageDecoder() }
 
+    ImageCache.shared.costLimit = 384 * 1024 * 1024
+    ImageCache.shared.countLimit = 1500
+
     ImagePipeline.shared = ImagePipeline {
       $0.dataCache = try? DataCache(name: "com.llsc12.paicord.imagecache")
       $0.dataCachePolicy = .automatic
       $0.imageCache = ImageCache.shared
-      // large attachments break by default
+      $0.isProgressiveDecodingEnabled = false
       $0.maximumResponseDataSize = nil
     }
   }

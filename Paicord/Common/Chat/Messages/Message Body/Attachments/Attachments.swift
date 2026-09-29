@@ -16,7 +16,14 @@ import SwiftUIX
 #endif
 
 extension MessageCell {
-  struct AttachmentsView: View {
+  struct AttachmentsView: View, Equatable {
+    static func == (lhs: AttachmentsView, rhs: AttachmentsView) -> Bool {
+      lhs.message.id == rhs.message.id
+        && lhs.previewableAttachments == rhs.previewableAttachments
+        && lhs.audioAttachments == rhs.audioAttachments
+        && lhs.fileAttachments == rhs.fileAttachments
+    }
+
     @Environment(\.appState) var appState
 
     var message: DiscordChannel.PartialMessage
@@ -337,9 +344,8 @@ extension MessageCell {
           }()
           NukeImage(url: url) {
             if let placeholder = attachment.placeholder,
-              let data = Data(base64Encoded: placeholder)
+              let img = ThumbHashCache.shared.image(for: placeholder)
             {
-              let img = thumbHashToImage(hash: data)
               #if os(macOS)
                 Image(nsImage: img)
                   .resizable()
@@ -441,17 +447,15 @@ extension MessageCell {
     struct AttachmentAudioPlayer: View {
       @Environment(\.theme) var theme
       var attachment: DiscordChannel.Message.Attachment
-      var player: AVPlayer
 
       init(attachment: DiscordChannel.Message.Attachment) {
         self.attachment = attachment
-        let audioURL = URL(string: attachment.url)!
-        self.player = AVPlayer(url: audioURL)
         self._waveform = .init(
-          initialValue: .init(repeating: 0.01, count: sampleCount)
+          initialValue: .init(repeating: 0.01, count: 30)
         )
       }
 
+      @State private var player: AVPlayer? = nil
       @State var duration: CMTime? = nil
       @State var currentTime: CMTime = .zero
       @State var isPlaying: Bool = false
@@ -459,21 +463,30 @@ extension MessageCell {
       private var sampleCount: Int { 30 }
       @State private var waveform: [Float] = []
 
+      private func getPlayer() -> AVPlayer {
+        if let player { return player }
+        let audioURL = URL(string: attachment.url)!
+        let p = AVPlayer(url: audioURL)
+        self.player = p
+        return p
+      }
+
       var body: some View {
         HStack {
           Button {
+            let p = getPlayer()
             if isPlaying {
               #if os(iOS)
                 try? AVAudioSession.sharedInstance().setActive(false)
               #endif
-              player.pause()
+              p.pause()
               isPlaying = false
             } else {
               #if os(iOS)
                 try? AVAudioSession.sharedInstance().setCategory(.playback)
                 try? AVAudioSession.sharedInstance().setActive(true)
               #endif
-              player.play()
+              p.play()
               isPlaying = true
             }
           } label: {
@@ -489,7 +502,8 @@ extension MessageCell {
               ? CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration!)
               : 0,
             onSeek: {
-              player.seek(
+              let p = getPlayer()
+              p.seek(
                 to: CMTime(
                   seconds: (duration != nil
                     ? CMTimeGetSeconds(duration!) * $0
@@ -532,28 +546,27 @@ extension MessageCell {
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .frame(maxWidth: 400, alignment: .leading)
         .task {
+          let p = getPlayer()
           do {
-            let duration = try await player.currentItem?.asset.load(.duration)
+            let duration = try await p.currentItem?.asset.load(.duration)
             self.duration = duration
           } catch {
             print("Failed to load audio duration: \(error)")
           }
-          // observe time updates
-          player.addPeriodicTimeObserver(
+          p.addPeriodicTimeObserver(
             forInterval: CMTime(seconds: 0.5, preferredTimescale: 600),
             queue: .main
           ) { time in
             self.currentTime = time
           }
-          // observe end of playback
           NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
-            object: player.currentItem,
+            object: p.currentItem,
             queue: .main
           ) { _ in
             self.isPlaying = false
             self.currentTime = .zero
-            player.seek(to: .zero)
+            p.seek(to: .zero)
             #if os(iOS)
               try? AVAudioSession.sharedInstance().setActive(false)
             #endif

@@ -306,7 +306,6 @@ func thumbHashToApproximateAspectRatio(hash: Data) -> Float32 {
   func thumbHashToImage(hash: Data) -> UIImage {
     var (w, h, rgba) = thumbHashToRGBA(hash: hash)
     rgba.withUnsafeMutableBytes { rgba in
-      // Convert from unpremultiplied alpha to premultiplied alpha
       var rgba = rgba.baseAddress!.bindMemory(
         to: UInt8.self,
         capacity: rgba.count
@@ -349,3 +348,28 @@ func thumbHashToApproximateAspectRatio(hash: Data) -> Float32 {
     return UIImage(cgImage: image!)
   }
 #endif
+
+#if os(macOS)
+  typealias PlatformImage = NSImage
+#else
+  typealias PlatformImage = UIImage
+#endif
+
+final class ThumbHashCache: @unchecked Sendable {
+  static let shared = ThumbHashCache()
+  private let cache = NSCache<NSString, PlatformImage>()
+
+  init() {
+    cache.countLimit = 500
+  }
+
+  func image(for base64: String) -> PlatformImage? {
+    if let cached = cache.object(forKey: base64 as NSString) {
+      return cached
+    }
+    guard let data = Data(base64Encoded: base64) else { return nil }
+    let img = thumbHashToImage(hash: data)
+    cache.setObject(img, forKey: base64 as NSString)
+    return img
+  }
+}

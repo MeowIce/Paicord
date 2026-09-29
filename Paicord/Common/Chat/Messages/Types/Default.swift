@@ -69,6 +69,8 @@ extension MessageCell {
       lhs.message.id == rhs.message.id
         && lhs.inline == rhs.inline
         && lhs.message.edited_timestamp == rhs.message.edited_timestamp
+        && lhs.message.content == rhs.message.content
+        && lhs.message.attachments == rhs.message.attachments
         && lhs.message.embeds == rhs.message.embeds
     }
 
