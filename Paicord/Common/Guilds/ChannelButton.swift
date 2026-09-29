@@ -354,11 +354,10 @@ struct ChannelButton: View {
       self.channelIDs = channelIDs
       self.channels = channels
       self.channel = channel
-      self._isExpanded = .init(
-        initialValue: UserDefaults.standard.bool(
-          forKey: "GuildCategory.\(channel.id).Expanded"
-        )
-      )
+      let saved = UserDefaults.standard.object(
+        forKey: "GuildCategory.\(channel.id).Expanded"
+      ) as? Bool
+      self._isExpanded = .init(initialValue: saved ?? true)
     }
 
     var body: some View {
