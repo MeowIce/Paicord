@@ -11,7 +11,13 @@ import SwiftUI
 import SwiftUIX
 import Textual
 
-struct MarkdownText: View {
+struct MarkdownText: View, Equatable {
+  static func == (lhs: MarkdownText, rhs: MarkdownText) -> Bool {
+    lhs.content == rhs.content
+      && lhs.foregroundColorOverride == rhs.foregroundColorOverride
+      && lhs.allowsJumboEmoji == rhs.allowsJumboEmoji
+      && lhs.handleInteractions == rhs.handleInteractions
+  }
   let content: String
   let channelStore: ChannelStore?
   var foregroundColorOverride: Color?

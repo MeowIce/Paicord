@@ -58,8 +58,9 @@ struct MessageCell: View {
       ) < 300 && message.referenced_message == nil
       && message.type == .default
       && priorMessage?.type != .guildMemberJoin
+    let isMentioned = userMentioned
 
-    Group {
+    return Group {
       switch message.type {
       case .default, .reply:
         DefaultMessage(
@@ -87,9 +88,9 @@ struct MessageCell: View {
     .background(Color.almostClear)
     .padding(.horizontal, 10)
     .padding(.vertical, 2)
-    .background(Color(hexadecimal6: 0xcc8735).opacity(userMentioned ? 0.05 : 0))
+    .background(Color(hexadecimal6: 0xcc8735).opacity(isMentioned ? 0.05 : 0))
     .background(alignment: .leading) {
-      Color(hexadecimal6: 0xce9c5c).opacity(userMentioned ? 1 : 0)
+      Color(hexadecimal6: 0xce9c5c).opacity(isMentioned ? 1 : 0)
         .maxWidth(2)
     }
     #if os(macOS)

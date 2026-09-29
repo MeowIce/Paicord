@@ -29,9 +29,50 @@ struct ChatView: View {
     @FocusState private var isChatFocused: Bool
   #endif
 
+  private struct MessagePair: Identifiable {
+    let message: DiscordChannel.Message
+    let prior: DiscordChannel.Message?
+    var id: MessageSnowflake { message.id }
+  }
+
+  private struct PendingMessagePair: Identifiable {
+    let message: Payloads.CreateMessage
+    let priorExisting: DiscordChannel.Message?
+    let priorEnqueued: Payloads.CreateMessage?
+    var id: String { message.nonce?.asString ?? UUID().uuidString }
+  }
+
+  private func makePairedMessages(_ messages: OrderedDictionary<MessageSnowflake, DiscordChannel.Message>.Values) -> [MessagePair] {
+    var pairs = [MessagePair]()
+    pairs.reserveCapacity(messages.count)
+    var prior: DiscordChannel.Message? = nil
+    for msg in messages {
+      pairs.append(MessagePair(message: msg, prior: prior))
+      prior = msg
+    }
+    return pairs
+  }
+
+  private func makePairedPending(_ pending: OrderedDictionary<MessageSnowflake, Payloads.CreateMessage>.Values, lastOrdered: DiscordChannel.Message?) -> [PendingMessagePair] {
+    var pairs = [PendingMessagePair]()
+    pairs.reserveCapacity(pending.count)
+    var priorEnqueued: Payloads.CreateMessage? = nil
+    for (index, msg) in pending.enumerated() {
+      if index == 0 {
+        pairs.append(PendingMessagePair(message: msg, priorExisting: lastOrdered, priorEnqueued: nil))
+      } else {
+        pairs.append(PendingMessagePair(message: msg, priorExisting: nil, priorEnqueued: priorEnqueued))
+      }
+      priorEnqueued = msg
+    }
+    return pairs
+  }
+
   var body: some View {
     let orderedMessages = vm.messages.values
     let pendingMessages = drain.pendingMessages[vm.channelId, default: [:]]
+    let pairedMessages = makePairedMessages(orderedMessages)
+    let pairedPending = makePairedPending(pendingMessages.values, lastOrdered: orderedMessages.last)
 
     let shouldAnimate =
       orderedMessages.last?.author?.id != gw.user.currentUser?.id
@@ -49,33 +90,23 @@ struct ChatView: View {
             }
           }
 
-          ForEach(orderedMessages) { msg in
-            let prior = vm.getMessage(before: msg)
-            if messageAllowed(msg) {
+          ForEach(pairedMessages) { pair in
+            if messageAllowed(pair.message) {
               MessageCell(
-                for: msg,
-                prior: prior,
+                for: pair.message,
+                prior: pair.prior,
                 channel: vm
               )
             }
           }
 
-          ForEach(pendingMessages.values) { message in
-            if pendingMessages.count > 1,
-              let messageIndex = pendingMessages.values.firstIndex(where: {
-                $0.nonce == message.nonce
-              }),
-              messageIndex > 0
-            {
-              let priorMessage = pendingMessages.values[messageIndex - 1]
-              SendMessageCell(for: message, prior: priorMessage)
-            } else if let latestMessage = orderedMessages.last {
-              SendMessageCell(for: message, prior: latestMessage)
+          ForEach(pairedPending) { pair in
+            if let priorEnqueued = pair.priorEnqueued {
+              SendMessageCell(for: pair.message, prior: priorEnqueued)
+            } else if let priorExisting = pair.priorExisting {
+              SendMessageCell(for: pair.message, prior: priorExisting)
             } else {
-              SendMessageCell(
-                for: message,
-                prior: Optional<DiscordChannel.Message>.none
-              )
+              SendMessageCell(for: pair.message, prior: Optional<DiscordChannel.Message>.none)
             }
           }
         }

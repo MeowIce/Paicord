@@ -1,16 +1,5 @@
 import Foundation
 
-// MARK: - Overview
-//
-// `PatternProcessor` applies pattern-based substitutions to an `AttributedString` after parsing.
-// It walks each run, skips preformatted content, tokenizes the run’s text, and replaces tokens
-// using the first matching syntax extension.
-//
-// The processor keeps run attributes intact for unchanged text and allows replacement logic to
-// inject new attributes (for example, emoji URLs) while preserving the rest of the run’s metadata.
-//
-// Syntax extensions are opt-in; when no extensions are provided, the input is returned unchanged.
-
 extension AttributedStringMarkdownParser {
   struct PatternProcessor {
     private let syntaxExtensions: [SyntaxExtension]
@@ -37,7 +26,6 @@ extension AttributedStringMarkdownParser {
           let tokens = try tokenizer.tokenize(text)
 
           if tokens.count == 1, tokens.first?.type == .text {
-            // There are no patterns detected
             output.append(attributedString[run.range])
           } else {
             for token in tokens {
@@ -48,7 +36,6 @@ extension AttributedStringMarkdownParser {
                 runDiscriminator += 1
                 output.append(replacement)
               } else {
-                // Append the token content without replacing
                 output.append(AttributedString(token.content, attributes: run.attributes))
               }
             }
@@ -67,7 +54,7 @@ extension Array where Element == AttributedStringMarkdownParser.SyntaxExtension 
       return nil
     }
     return first {
-      $0.patterns.map(\.tokenType).contains(tokenType)
+      $0.patterns.contains(where: { $0.tokenType == tokenType })
     }
   }
 }

@@ -46,6 +46,7 @@ extension MessageCell {
                 channelStore: channelStore,
                 allowsJumboEmoji: true
               )
+              .equatable()
             }
           }
         }
